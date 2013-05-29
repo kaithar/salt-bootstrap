@@ -2632,7 +2632,7 @@ install_gentoo_post() {
         [ $fname = "syndic" ] && [ $INSTALL_SYNDIC -eq $BS_FALSE ] && continue
 
         rc-update add salt-$fname default
-        /etc/init.d/salt_$fname start &
+        /etc/init.d/salt-$fname start &
     done
 }
 
@@ -2644,8 +2644,8 @@ install_gentoo_restart_daemons() {
         [ $fname = "master" ] && [ $INSTALL_MASTER -eq $BS_FALSE ] && continue
         [ $fname = "syndic" ] && [ $INSTALL_SYNDIC -eq $BS_FALSE ] && continue
 
-        /etc/init.d/salt_$fname stop > /dev/null 2>&1
-        /etc/init.d/salt_$fname start &
+        /etc/init.d/salt-$fname stop > /dev/null 2>&1
+        /etc/init.d/salt-$fname start &
     done
 }
 

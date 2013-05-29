@@ -518,7 +518,7 @@ __sort_release_files() {
     primary_release_files=""
     secondary_release_files=""
     # Sort know VS un-known files first
-    for release_file in $(echo $@ | sed -r 's:[[:space:]]:\n:g' | sort --unique --ignore-case); do
+    for release_file in $(echo $@ | sed -r 's:[[:space:]]:\n:g' | sort --unique "--ignore-case"); do
         match=$(echo $release_file | egrep -i ${KNOWN_RELEASE_FILES})
         if [ "x${match}" != "x" ]; then
             primary_release_files="${primary_release_files} ${release_file}"
@@ -2047,7 +2047,8 @@ __freebsd_get_packagesite() {
         echowarn "The environment variable PACKAGESITE is not set."
         echowarn "The installation will, most likely fail since pkgbeta.freebsd.org does not yet contain any packages"
     fi
-    BS_PACKAGESITE=${PACKAGESITE:-"http://pkgbeta.freebsd.org/freebsd:${DISTRO_MAJOR_VERSION}:${BSD_ARCH}/latest"}
+    DEFAULT_PACKAGE_SITE="http://pkgbeta.freebsd.org/freebsd:${DISTRO_MAJOR_VERSION}:${BSD_ARCH}/latest"
+    BS_PACKAGESITE=${PACKAGESITE:-$DEFAULT_PACKAGE_SITE}
 
     # Treat unset variables as errors once more
     set -o nounset

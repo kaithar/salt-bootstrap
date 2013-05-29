@@ -2557,18 +2557,18 @@ install_suse_11_restart_daemons() {
 #
 
 __gentoo_set_ackeys() {
-    ACKEYS=""
+    GENTOO_ACKEYS=""
     if [ ! -e /etc/portage/package.accept_keywords ]; then
         # This is technically bad, but probably for the best.
         # We'll assume that they want a file, as that's the default behaviour of portage.
         # If they really want a folder they'll need to handle that themselves.
         # We could use the ACCEPT_KEYWORDS environment variable, but that exceeds the minimum requires.
-        ACKEYS="/etc/portage/package.accept_keywords"
+        GENTOO_ACKEYS="/etc/portage/package.accept_keywords"
     else
         if [ -f /etc/portage/package.accept_keywords ]; then
-            ACKEYS="/etc/portage/package.accept_keywords"
+            GENTOO_ACKEYS="/etc/portage/package.accept_keywords"
         elif [ -d /etc/portage/package.accept_keywords ]; then
-            ACKEYS="/etc/portage/package.accept_keywords/salt"
+            GENTOO_ACKEYS="/etc/portage/package.accept_keywords/salt"
         else
             # We could use accept_keywords env, but this likely indicates a bigger problem.
             echo "Error: /etc/portage/package.accept_keywords is neither directory nor file."
@@ -2584,7 +2584,7 @@ __gentoo_pre_dep() {
         mkdir /etc/portage
     fi
     __gentoo_set_ackeys || return 1
-    cat >> ${ACKEYS} << _EOT
+    cat >> ${GENTOO_ACKEYS} << _EOT
 # Keywords added by bootstrap-salt
 # required by salt, based on the 0.15.1 ebuild
 >=dev-python/pycryptopp-0.6.0
@@ -2595,7 +2595,7 @@ __gentoo_pre_dep() {
 _EOT
 }
 __gentoo_post_dep() {
-    cat >> ${ACKEYS} << _EOT
+    cat >> ${GENTOO_ACKEYS} << _EOT
 # End of bootstrap-salt keywords.
 _EOT
     # the -o option asks it to emerge the deps but not the package.
@@ -2604,14 +2604,14 @@ _EOT
 
 install_gentoo_deps() {
     __gentoo_pre_dep || return 1
-    cat "app-admin/salt" >> ${ACKEYS}
+    echo "app-admin/salt" >> ${GENTOO_ACKEYS}
     __gentoo_post_dep
 }
 
 install_gentoo_git_deps() {
     emerge git
     __gentoo_pre_dep || return 1
-    cat "=app-admin/salt-9999 **" >> ${ACKEYS}
+    echo "=app-admin/salt-9999 **" >> ${GENTOO_ACKEYS}
     __gentoo_post_dep
 }
 
